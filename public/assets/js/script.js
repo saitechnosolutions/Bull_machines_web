@@ -52,3 +52,5 @@ $(".toggle-password").click(function () {
         input.attr("type", "password");
     }
 });
+
+

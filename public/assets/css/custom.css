@@ -4,3 +4,18 @@
     margin-right: 10px;
     margin-top: -25px;
 }
+
+.swal-custom-popup {
+    color: white;
+    /* Text color */
+    background-color: #323232;
+    /* Optional: Background color */
+}
+
+/* SweetAlert2 Toast Customization */
+.swal-custom-toast {
+    color: white;
+    /* Text color */
+    background-color: #323232;
+    /* Optional: Background color */
+}

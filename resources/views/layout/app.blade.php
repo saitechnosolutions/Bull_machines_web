@@ -6,8 +6,9 @@
     <meta charset="utf-8" />
     <title>Bull Machines CRM</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+    <meta content="Bull machines Admin Dashboard" name="description" />
     <meta content="Themesbrand" name="author" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- App favicon -->
     <link rel="shortcut icon" href="/assets/images/new/bull-machine-logo.png">
 
@@ -238,6 +239,8 @@
     <!-- Right bar overlay-->
     <div class="rightbar-overlay"></div>
 
+
+
     <!-- JAVASCRIPT -->
     <script src="assets/libs/jquery/jquery.min.js"></script>
     <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -261,13 +264,17 @@
     <script src="assets/js/pages/dashboard.init.js"></script>
 
     <script src="assets/js/app.js"></script>
-    <script src="assets/js/script.js"></script>
+
 
     {{-- SWEETALERT --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
 
     {{-- JUST VALIDATE --}}
     <script src="https://unpkg.com/just-validate@latest/dist/just-validate.production.min.js"></script>
+
+    <script src="assets/js/script.js"></script>
+
+    @yield('scripts')
 
 </body>
 

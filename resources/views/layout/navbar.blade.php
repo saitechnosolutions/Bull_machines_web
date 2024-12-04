@@ -139,7 +139,7 @@
                                     <div class="arrow-down"></div>
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="topnav-email">
-                                    <a href="apps-email-inbox.html" class="dropdown-item" data-key="t-inbox">Country</a>
+                                    <a href="/country" class="dropdown-item" data-key="t-inbox">Country</a>
                                     <a href="apps-email-read.html" class="dropdown-item"
                                         data-key="t-read-email">State</a>
                                     <a href="apps-email-read.html" class="dropdown-item"
