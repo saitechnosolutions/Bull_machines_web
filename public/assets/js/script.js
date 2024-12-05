@@ -77,7 +77,7 @@ $(document).ready(function () {
         $("#master_district_state_select").val(stateId);
     };
 
-    // APPEND VALUES ON INPUT FIELDS ON DISTRICT MASTER
+    // APPEND VALUES ON INPUT FIELDS ON PANCHAYAT MASTER
 
     window.handlePanchayatClick = function (
         panchayatId,
@@ -87,9 +87,19 @@ $(document).ready(function () {
         $("#input-panchayat_id").val(panchayatId);
         $("#input-master_panchayat_name").val(panchayatName);
         $("#master_panchayat_district_select").val(districtID);
+    };
 
-        console.log(panchayatId);
-        console.log(panchayatName);
-        console.log(districtID);
+    // APPEND VALUES ON INPUT FIELDS ON DESIGNATION MASTER
+
+    window.handledesignationClick = function (designationId, designationName) {
+        $("#input-designation_id").val(designationId);
+        $("#input-master_designation_name").val(designationName);
+    };
+
+    // APPEND VALUES ON INPUT FIELDS ON BRANCH MASTER
+
+    window.handleBranchClick = function (branchId, branchName) {
+        $("#input-branch_id").val(branchId);
+        $("#input-master_branch_name").val(branchName);
     };
 });

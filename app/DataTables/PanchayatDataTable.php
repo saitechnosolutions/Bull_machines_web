@@ -75,6 +75,7 @@ class PanchayatDataTable extends DataTable {
         //->dom( 'Bfrtip' )
         ->orderBy( 1 )
         ->selectStyleSingle()
+        ->addTableClass('table table-striped table-bordered table-hover')
         ->buttons( [
             Button::make( 'excel' ),
             Button::make( 'csv' ),

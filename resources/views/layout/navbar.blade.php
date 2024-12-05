@@ -111,14 +111,14 @@
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="topnav-ecommerce">
 
-                                    <a href="{{ route('employee.index') }}" class="dropdown-item"
+                                    <a href="{{ route('employe.index') }}" class="dropdown-item"
                                         data-key="t-products">Employee</a>
                                     <a href="ecommerce-product-detail.html" class="dropdown-item"
                                         data-key="t-product-detail">Dealer</a>
                                     <a href="ecommerce-orders.html" class="dropdown-item" data-key="t-orders">Orders</a>
-                                    <a href="ecommerce-customers.html" class="dropdown-item"
+                                    <a href="/employee/designation" class="dropdown-item"
                                         data-key="t-customers">Designation</a>
-                                    <a href="ecommerce-cart.html" class="dropdown-item" data-key="t-cart">Branch</a>
+                                    <a href="/employee/branch" class="dropdown-item" data-key="t-cart">Branch</a>
                                     <a href="ecommerce-checkout.html" class="dropdown-item" data-key="t-checkout">User
                                         Device Management</a>
                                     <a href="ecommerce-shops.html" class="dropdown-item" data-key="t-shops">Organization

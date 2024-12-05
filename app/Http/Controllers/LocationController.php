@@ -27,7 +27,7 @@ class LocationController extends Controller {
     public function countryindex( CountryDataTable $dataTable ) {
         try {
             // return view( 'pages.masters.country' );
-            return $dataTable->render( 'pages.masters.country' );
+            return $dataTable->render( 'pages.masters.location.country' );
         } catch ( \Throwable $th ) {
             return redirect()->back()->with( 'error', 'something went wrong' );
             Log::error( $th );
@@ -66,7 +66,7 @@ class LocationController extends Controller {
     public function stateindex( StateDataTable $dataTable ) {
         try {
             $countries = Country::all();
-            return $dataTable->render( 'pages.masters.state', compact( 'countries' ) );
+            return $dataTable->render( 'pages.masters.location.state', compact( 'countries' ) );
         } catch ( \Throwable $th ) {
             return redirect()->back()->with( 'error', 'something went wrong' );
             Log::error( $th );
@@ -108,7 +108,7 @@ class LocationController extends Controller {
     public function districtindex( DistrictDataTable $dataTable ) {
         try {
             $states = State::all();
-            return $dataTable->render( 'pages.masters.district', compact( 'states' ) );
+            return $dataTable->render( 'pages.masters.location.district', compact( 'states' ) );
         } catch ( \Throwable $th ) {
             return redirect()->back()->with( 'error', 'something went wrong' );
             Log::error( $th );
@@ -155,7 +155,7 @@ class LocationController extends Controller {
     public function panchayatindex( PanchayatDataTable $dataTable ) {
         try {
             $districts = District::all();
-            return $dataTable->render( 'pages.masters.panchayat', compact( 'districts' ) );
+            return $dataTable->render( 'pages.masters.location.panchayat', compact( 'districts' ) );
         } catch ( \Throwable $th ) {
             return redirect()->back()->with( 'error', 'something went wrong' );
             Log::error( $th );

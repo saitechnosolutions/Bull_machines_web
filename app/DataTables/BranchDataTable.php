@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\State;
+use App\Models\Branch;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -12,7 +12,7 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class StateDataTable extends DataTable
+class BranchDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -22,31 +22,23 @@ class StateDataTable extends DataTable
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-        ->setRowId('id')
-        ->addColumn('country_name', function ($row) {
-            return e($row->country_name); // Escaped country name
-        })
-        ->addColumn('state_name', function ($row) {
-            // Create clickable HTML for state_name
-            return '<a href="#" onclick="handleStateClick(' 
-                . $row->id . ', \'' 
-                . addslashes($row->state_name) . '\', ' 
-                . $row->country_id . ')">' 
-                . e($row->state_name) . '</a>';
-        })
-        ->rawColumns(['state_name']); // Ensure HTML is rendered
-            
+            ->setRowId('id')
+            ->addColumn('branch_name', function ($row) {
+                // Create clickable HTML for state_name
+                return '<a href="#" onclick="handleBranchClick(' 
+                    . $row->id . ', \'' 
+                    . addslashes($row->branch_name) . '\',)">' 
+                    . e($row->branch_name) . '</a>';
+            })
+            ->rawColumns(['branch_name']);
     }
 
     /**
      * Get the query source of dataTable.
      */
-    public function query(State $model): QueryBuilder
+    public function query(Branch $model): QueryBuilder
     {
-        // return $model->newQuery();
-        return $model->newQuery()
-        ->join('countries', 'states.country_id', '=', 'countries.id')
-        ->select('states.id', 'states.state_name', 'countries.country_name', 'states.country_id');
+        return $model->newQuery();
     }
 
     /**
@@ -55,7 +47,7 @@ class StateDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('state-table')
+                    ->setTableId('branch-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     //->dom('Bfrtip')
@@ -84,8 +76,7 @@ class StateDataTable extends DataTable
             //       ->width(60)
             //       ->addClass('text-center'),
             Column::make('id'),
-            Column::make('country_name')->title('Country Name'),
-            Column::make('state_name')->title('State Name'),
+            Column::make('branch_name')->title('Branch Name'),
         ];
     }
 
@@ -94,6 +85,6 @@ class StateDataTable extends DataTable
      */
     protected function filename(): string
     {
-        return 'State_' . date('YmdHis');
+        return 'Branch_' . date('YmdHis');
     }
 }
