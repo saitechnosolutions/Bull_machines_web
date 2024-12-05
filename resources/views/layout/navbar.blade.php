@@ -143,7 +143,7 @@
                                     <a href="/locations/state" class="dropdown-item" data-key="t-read-email">State</a>
                                     <a href="/locations/district" class="dropdown-item"
                                         data-key="t-read-email">District</a>
-                                    <a href="apps-email-read.html" class="dropdown-item"
+                                    <a href="/locations/panchayat" class="dropdown-item"
                                         data-key="t-read-email">Panchayat</a>
                                 </div>
                             </div>

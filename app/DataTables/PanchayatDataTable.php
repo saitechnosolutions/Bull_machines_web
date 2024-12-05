@@ -2,7 +2,7 @@
 
 namespace App\DataTables;
 
-use App\Models\District;
+use App\Models\Panchayat;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -12,7 +12,7 @@ use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 
-class DistrictDataTable extends DataTable {
+class PanchayatDataTable extends DataTable {
     /**
     * Build the DataTable class.
     *
@@ -21,7 +21,7 @@ class DistrictDataTable extends DataTable {
 
     public function dataTable( QueryBuilder $query ): EloquentDataTable {
         return ( new EloquentDataTable( $query ) )
-        ->setRowId( 'district_id' )
+        ->setRowId( 'panchayat_id' )
         ->addColumn('country_name', function ($row) {
             return e($row->country_name); // Escaped country name
         })
@@ -29,30 +29,37 @@ class DistrictDataTable extends DataTable {
             return e($row->state_name); // Escaped country name
         })
         ->addColumn('district_name', function ($row) {
-            // Create clickable HTML for state_name
-            return '<a href="#" onclick="handleDistrictClick(' 
-                . $row->state_id . ', \'' 
-                . addslashes($row->district_name) . '\', ' 
-                . $row->district_id .')">' 
-                . e($row->district_name) . '</a>';
+            return e($row->district_name); // Escaped country name
         })
-        ->rawColumns(['district_name']); // Ensure HTML is rendered
+        ->addColumn('panchayat_name', function ($row) {
+            // Create clickable HTML for state_name
+            return '<a href="#" onclick="handlePanchayatClick(' 
+                . $row->panchayat_id . ', \'' 
+                . addslashes($row->panchayat_name) . '\', ' 
+                . $row->district_id .')">' 
+                . e($row->panchayat_name) . '</a>';
+        })
+        ->rawColumns(['panchayat_name']);
     }
 
     /**
     * Get the query source of dataTable.
     */
 
-    public function query( District $model ): QueryBuilder {
+    public function query( Panchayat $model ): QueryBuilder {
         return $model->newQuery()
-        ->join( 'countries', 'districts.country_id', '=', 'countries.id' )
-        ->join( 'states', 'districts.state_id', '=', 'states.id' )
+        ->join( 'countries', 'panchayats.country_id', '=', 'countries.id' )
+        ->join( 'states', 'panchayats.state_id', '=', 'states.id' )
+        ->join( 'districts', 'panchayats.district_id', '=', 'districts.id' )
         ->select(
-            'districts.id as district_id', 
+            'districts.id as district_id',
             'states.state_name',
             'countries.country_name',
-            'states.id as state_id', 
-            'districts.district_name'
+            'states.id as state_id',
+            'districts.district_name',
+            'districts.id as district_id',
+            'panchayats.id as panchayat_id',
+            'panchayats.panchayat_name',
         );
     }
 
@@ -62,7 +69,7 @@ class DistrictDataTable extends DataTable {
 
     public function html(): HtmlBuilder {
         return $this->builder()
-        ->setTableId( 'district-table' )
+        ->setTableId( 'panchayat-table' )
         ->columns( $this->getColumns() )
         ->minifiedAjax()
         //->dom( 'Bfrtip' )
@@ -89,10 +96,11 @@ class DistrictDataTable extends DataTable {
             // ->printable( false )
             // ->width( 60 )
             // ->addClass( 'text-center' ),
-            Column::make('district_id')->title('ID'), // Use aliased column
-            Column::make('country_name')->title('Country Name'),
-            Column::make('state_name')->title('State Name'),
-            Column::make('district_name')->title('District Name'),
+            Column::make( 'panchayat_id' )->title('ID'),
+            Column::make( 'country_name' )->title('Country name'),
+            Column::make( 'state_name' )->title('State name'),
+            Column::make( 'district_name' )->title('District name'),
+            Column::make( 'panchayat_name' )->title('Panchayat name'),
         ];
     }
 
@@ -100,6 +108,6 @@ class DistrictDataTable extends DataTable {
     * Get the filename for export.
     */
     protected function filename(): string {
-        return 'District_' . date( 'YmdHis' );
+        return 'Panchayat_' . date( 'YmdHis' );
     }
 }

@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\Log;
 use App\DataTables\CountryDataTable;
 use App\DataTables\StateDataTable;
 use App\DataTables\DistrictDataTable;
+use App\DataTables\PanchayatDataTable;
 use App\Models\District;
+use App\Models\Panchayat;
 use App\Models\State;
 
 class LocationController extends Controller {
@@ -150,10 +152,10 @@ class LocationController extends Controller {
 
     // PANCHAYAT
 
-    public function panchayatindex( DistrictDataTable $dataTable ) {
+    public function panchayatindex( PanchayatDataTable $dataTable ) {
         try {
             $districts = District::all();
-            return $dataTable->render( 'pages.masters.district', compact( 'districts' ) );
+            return $dataTable->render( 'pages.masters.panchayat', compact( 'districts' ) );
         } catch ( \Throwable $th ) {
             return redirect()->back()->with( 'error', 'something went wrong' );
             Log::error( $th );
@@ -162,35 +164,38 @@ class LocationController extends Controller {
 
     public function panchayatstore( Request $request ) {
         try {
-            $districtName = $request->districtName;
-            $districtID = $request->districtID;
-            $state = $request->state;
+            $panchayatName = $request->panchayatName;
+            $panchayatID = $request->panchayatID;
+            $district = $request->district;
 
-            $stateid = State::find( $state );
+            $districtid = District::find( $district );
+            $stateid = State::find( $districtid->state_id );
 
-            if ( !$districtID ) {
+            if ( !$panchayatID ) {
 
-                District::create( [
+                Panchayat::create( [
                     'country_id'=>$stateid->country_id,
-                    'state_id'=>$state,
-                    'district_name'=>$districtName,
+                    'state_id'=>$districtid->state_id,
+                    'district_id'=>$district,
+                    'panchayat_name'=>$panchayatName,
                 ] );
 
-                return response()->json( [ 'success', 'District created successfully', 201 ] );
+                return response()->json( [ 'success', 'Panchayat created successfully', 201 ] );
             } else {
-                $district = District::find( $districtID );
+                $panchayat = Panchayat::find( $panchayatID );
 
-                $district->update( [
+                $panchayat->update( [
                     'country_id'=>$stateid->country_id,
-                    'state_id'=>$state,
-                    'district_name'=>$districtName,
+                    'state_id'=>$districtid->state_id,
+                    'district_id'=>$district,
+                    'panchayat_name'=>$panchayatName,
                 ] );
 
-                return response()->json( [ 'success', 'District Updated successfully', 200 ] );
+                return response()->json( [ 'success', 'Panchayat Updated successfully', 200 ] );
             }
 
         } catch ( \Throwable $th ) {
-            return response()->json( [ 'error', 'error creating District', 400 ] );
+            return response()->json( [ 'error', 'error creating Panchayat', 400 ] );
             Log::error( $th );
         }
     }

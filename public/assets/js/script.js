@@ -76,4 +76,20 @@ $(document).ready(function () {
         $("#input-master_district_name").val(districtName);
         $("#master_district_state_select").val(stateId);
     };
+
+    // APPEND VALUES ON INPUT FIELDS ON DISTRICT MASTER
+
+    window.handlePanchayatClick = function (
+        panchayatId,
+        panchayatName,
+        districtID
+    ) {
+        $("#input-panchayat_id").val(panchayatId);
+        $("#input-master_panchayat_name").val(panchayatName);
+        $("#master_panchayat_district_select").val(districtID);
+
+        console.log(panchayatId);
+        console.log(panchayatName);
+        console.log(districtID);
+    };
 });
