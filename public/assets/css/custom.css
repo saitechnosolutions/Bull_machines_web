@@ -6,16 +6,21 @@
 }
 
 .swal-custom-popup {
+    background-color: #333;
+    /* Dark background */
     color: white;
-    /* Text color */
-    background-color: #323232;
-    /* Optional: Background color */
+    /* White text */
 }
 
-/* SweetAlert2 Toast Customization */
-.swal-custom-toast {
+.swal-custom-popup .swal2-title,
+.swal-custom-popup .swal2-text {
+    color: white !important;
+    /* Ensure the text is white */
+}
+
+.swal2-toast {
+    background-color: #333;
+    /* Dark background for toast */
     color: white;
-    /* Text color */
-    background-color: #323232;
-    /* Optional: Background color */
+    /* White text for toast */
 }

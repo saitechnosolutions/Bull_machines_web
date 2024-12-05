@@ -7,13 +7,13 @@
             <div class="row">
                 <div class="col-12">
                     <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                        <h4 class="mb-sm-0 font-size-18">Country Master</h4>
+                        <h4 class="mb-sm-0 font-size-18">District Master</h4>
 
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Dashboard</a></li>
                                 <li class="breadcrumb-item"><a href="javascript: void(0);">Locations</a></li>
-                                <li class="breadcrumb-item active">Country</li>
+                                <li class="breadcrumb-item active">District</li>
                             </ol>
                         </div>
 
@@ -22,19 +22,30 @@
             </div>
             <!-- end page title -->
 
+
             <div class="row">
                 <div class="col-xl-4 col-md-5">
                     <div class="card card-h-100">
                         <!-- card body -->
                         <div class="card-body">
-                            <form action="" method="post" id="country_add_form" data-url="">
+                            <form action="" method="post" id="district_add_form" data-url="">
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="">
-                                            <label for="input-country_name">Country</label>
-                                            <input type="text" class="form-control" id="input-country_name"
-                                                placeholder="Enter Country name" name="country_name">
-                                            <input type="hidden" name="" id="input-country_id">
+                                            <label for="master_district_state_select">Choose State</label>
+                                            <select class="form-select" id="master_district_state_select"
+                                                aria-label="Default select example">
+                                                <option selected>Choose State</option>
+                                                @foreach ($states as $state)
+                                                    <option value="{{ $state->id }}">{{ $state->state_name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="mt-3">
+                                            <label for="input-master_district_name">District</label>
+                                            <input type="text" class="form-control" id="input-master_district_name"
+                                                placeholder="Enter District name" name="master_district_name">
+                                            <input type="hidden" name="" id="input-district_id">
                                         </div>
 
                                         <div class="mt-3">
@@ -78,10 +89,10 @@
 @section('scripts')
     <script>
         // ADD CATEGORY VALIDATION
-        const validator = new window.JustValidate("#country_add_form");
+        const validator = new window.JustValidate("#district_add_form");
 
         validator
-            .addField("#input-country_name", [{
+            .addField("#input-master_district_name", [{
                     rule: "required",
                 },
                 {
@@ -93,16 +104,21 @@
                     value: 20,
                 },
             ])
+            .addField("#master_district_state_select", [{
+                rule: "required",
+            }, ])
             .onSuccess((event) => {
                 // event.currentTarget.submit();
                 event.preventDefault();
 
-                var countryName = $("#input-country_name").val();
-                var countryID = $("#input-country_id").val();
+                var districtName = $("#input-master_district_name").val();
+                var districtID = $("#input-district_id").val();
+                var state = $("#master_district_state_select").val();
 
                 var formData = {
-                    countryName: countryName,
-                    countryID: countryID,
+                    districtName: districtName,
+                    districtID: districtID,
+                    state: state,
                 };
 
                 $.ajaxSetup({
@@ -113,7 +129,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "/country_store",
+                    url: "/district_store",
                     data: formData,
                     beforeSend: function() {
                         $(".preloader").fadeIn();
@@ -124,7 +140,7 @@
                         if (response == 201) {
                             Swal.fire({
                                 title: "Success",
-                                text: "Country added Successfully",
+                                text: "District added Successfully",
                                 icon: "success",
                                 customClass: {
                                     popup: "swal-custom-popup", // Add a custom class
@@ -148,12 +164,12 @@
 
                             Toast.fire({
                                 icon: "success",
-                                title: "Country added Successfully",
+                                title: "District added Successfully",
                             });
                         } else {
                             Swal.fire({
                                 title: "Success",
-                                text: "Country Updated Successfully",
+                                text: "District Updated Successfully",
                                 icon: "success",
                                 customClass: {
                                     popup: "swal-custom-popup", // Add a custom class
@@ -177,7 +193,7 @@
 
                             Toast.fire({
                                 icon: "success",
-                                title: "Country updated Successfully",
+                                title: "District updated Successfully",
                             });
                         }
 

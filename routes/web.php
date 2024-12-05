@@ -27,5 +27,15 @@ Route::resource('employee',EmployeeController::class);
 
 // LOCATIONS
 
-Route::get('/country',[LocationController::class,'countryindex']);
+// COUNTRY
+Route::get('/locations/country',[LocationController::class,'countryindex']);
 Route::post('/country_store',[LocationController::class,'countrystore']);
+// STATE
+Route::get('/locations/state',[LocationController::class,'stateindex']);
+Route::post('/state_store',[LocationController::class,'statestore']);
+// DISTRICT
+Route::get('/locations/district',[LocationController::class,'districtindex']);
+Route::post('/district_store',[LocationController::class,'districtstore']);
+// PANCHAYAT
+Route::get('/locations/panchayat',[LocationController::class,'panchayatindex']);
+Route::post('/panchayat_store',[LocationController::class,'panchayatstore']);

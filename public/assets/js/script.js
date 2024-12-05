@@ -53,4 +53,27 @@ $(".toggle-password").click(function () {
     }
 });
 
+// APPEND VALUES ON INPUT FIELDS ON COUNTRY MASTER
 
+function handleCountryClick(countryId, countryName) {
+    $("#input-country_name").val(countryName);
+    $("#input-country_id").val(countryId);
+}
+
+$(document).ready(function () {
+    // APPEND VALUES ON INPUT FIELDS ON STATE MASTER
+
+    window.handleStateClick = function (stateId, stateName, countryId) {
+        $("#input-state_id").val(stateId);
+        $("#input-master_state_name").val(stateName);
+        $("#master_state_country_select").val(countryId);
+    };
+
+    // APPEND VALUES ON INPUT FIELDS ON DISTRICT MASTER
+
+    window.handleDistrictClick = function (stateId, districtName, districtID) {
+        $("#input-district_id").val(districtID);
+        $("#input-master_district_name").val(districtName);
+        $("#master_district_state_select").val(stateId);
+    };
+});

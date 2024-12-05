@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Country;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\DataTables\CountryDataTable;
+use App\DataTables\StateDataTable;
+use App\DataTables\DistrictDataTable;
+use App\Models\District;
+use App\Models\State;
 
 class LocationController extends Controller {
     /**
@@ -15,9 +20,12 @@ class LocationController extends Controller {
         //
     }
 
-    public function countryindex() {
+    // COUNTRY
+
+    public function countryindex( CountryDataTable $dataTable ) {
         try {
-            return view( 'pages.masters.country' );
+            // return view( 'pages.masters.country' );
+            return $dataTable->render( 'pages.masters.country' );
         } catch ( \Throwable $th ) {
             return redirect()->back()->with( 'error', 'something went wrong' );
             Log::error( $th );
@@ -27,21 +35,162 @@ class LocationController extends Controller {
     public function countrystore( Request $request ) {
         try {
             $countryname = $request->countryName;
-            Country::create( [
-                'country_name'=>$countryname,
-            ] );
-            return response()->json( [ 'success', 'country created successfully', 201 ] );
+            $countryID = $request->countryID;
+
+            if ( !$countryID ) {
+                Country::create( [
+                    'country_name'=>$countryname,
+                ] );
+
+                return response()->json( [ 'success', 'country created successfully', 201 ] );
+            } else {
+                $country = Country::find( $countryID );
+
+                $country->update( [
+                    'country_name'=>$countryname,
+                ] );
+
+                return response()->json( [ 'success', 'country Updated successfully', 200 ] );
+            }
+
         } catch ( \Throwable $th ) {
             return response()->json( [ 'error', 'error creating country', 400 ] );
             Log::error( $th );
         }
     }
 
-    public function stateindex() {
+    // STATE
+
+    public function stateindex( StateDataTable $dataTable ) {
         try {
-            return view( 'pages.masters.state' );
+            $countries = Country::all();
+            return $dataTable->render( 'pages.masters.state', compact( 'countries' ) );
         } catch ( \Throwable $th ) {
             return redirect()->back()->with( 'error', 'something went wrong' );
+            Log::error( $th );
+        }
+    }
+
+    public function statestore( Request $request ) {
+        try {
+            $stateName = $request->stateName;
+            $stateID = $request->stateID;
+            $country = $request->country;
+
+            if ( !$stateID ) {
+                State::create( [
+                    'state_name'=>$stateName,
+                    'country_id'=>$country,
+                ] );
+
+                return response()->json( [ 'success', 'State created successfully', 201 ] );
+            } else {
+                $state = State::find( $stateID );
+
+                $state->update( [
+                    'state_name'=>$stateName,
+                    'country_id'=>$country,
+                ] );
+
+                return response()->json( [ 'success', 'State Updated successfully', 200 ] );
+            }
+
+        } catch ( \Throwable $th ) {
+            return response()->json( [ 'error', 'error creating country', 400 ] );
+            Log::error( $th );
+        }
+    }
+
+    // DISTRICT
+
+    public function districtindex( DistrictDataTable $dataTable ) {
+        try {
+            $states = State::all();
+            return $dataTable->render( 'pages.masters.district', compact( 'states' ) );
+        } catch ( \Throwable $th ) {
+            return redirect()->back()->with( 'error', 'something went wrong' );
+            Log::error( $th );
+        }
+    }
+
+    public function districtstore( Request $request ) {
+        try {
+            $districtName = $request->districtName;
+            $districtID = $request->districtID;
+            $state = $request->state;
+
+            $stateid = State::find( $state );
+
+            if ( !$districtID ) {
+
+                District::create( [
+                    'country_id'=>$stateid->country_id,
+                    'state_id'=>$state,
+                    'district_name'=>$districtName,
+                ] );
+
+                return response()->json( [ 'success', 'District created successfully', 201 ] );
+            } else {
+                $district = District::find( $districtID );
+
+                $district->update( [
+                    'country_id'=>$stateid->country_id,
+                    'state_id'=>$state,
+                    'district_name'=>$districtName,
+                ] );
+
+                return response()->json( [ 'success', 'District Updated successfully', 200 ] );
+            }
+
+        } catch ( \Throwable $th ) {
+            return response()->json( [ 'error', 'error creating District', 400 ] );
+            Log::error( $th );
+        }
+    }
+
+    // PANCHAYAT
+
+    public function panchayatindex( DistrictDataTable $dataTable ) {
+        try {
+            $districts = District::all();
+            return $dataTable->render( 'pages.masters.district', compact( 'districts' ) );
+        } catch ( \Throwable $th ) {
+            return redirect()->back()->with( 'error', 'something went wrong' );
+            Log::error( $th );
+        }
+    }
+
+    public function panchayatstore( Request $request ) {
+        try {
+            $districtName = $request->districtName;
+            $districtID = $request->districtID;
+            $state = $request->state;
+
+            $stateid = State::find( $state );
+
+            if ( !$districtID ) {
+
+                District::create( [
+                    'country_id'=>$stateid->country_id,
+                    'state_id'=>$state,
+                    'district_name'=>$districtName,
+                ] );
+
+                return response()->json( [ 'success', 'District created successfully', 201 ] );
+            } else {
+                $district = District::find( $districtID );
+
+                $district->update( [
+                    'country_id'=>$stateid->country_id,
+                    'state_id'=>$state,
+                    'district_name'=>$districtName,
+                ] );
+
+                return response()->json( [ 'success', 'District Updated successfully', 200 ] );
+            }
+
+        } catch ( \Throwable $th ) {
+            return response()->json( [ 'error', 'error creating District', 400 ] );
             Log::error( $th );
         }
     }
