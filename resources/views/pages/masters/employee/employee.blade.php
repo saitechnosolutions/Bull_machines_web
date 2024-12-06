@@ -26,7 +26,7 @@
                     <div class="card card-h-100">
                         <!-- card body -->
                         <div class="card-body">
-                            <form action="" method="post">
+                            <form action="" method="post" id="employee_creation_form">
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <div class="">

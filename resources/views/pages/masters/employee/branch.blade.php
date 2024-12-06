@@ -25,7 +25,7 @@
 
             <div class="row">
                 <div class="col-xl-4 col-md-5">
-                    <div class="card card-h-100">
+                    <div class="card card-h-50">
                         <!-- card body -->
                         <div class="card-body">
                             <form action="" method="post" id="branch_add_form" data-url="">
@@ -35,18 +35,47 @@
                                             <label for="input-master_branch_name">Designation Name</label>
                                             <input type="text" class="form-control" id="input-master_branch_name"
                                                 placeholder="Enter Branch name" name="master_branch_name">
-                                            <input type="hidden" name="" id="input-branch_id">
                                         </div>
 
                                         <div class="mt-3">
                                             <div class="row">
-                                                <div class="col-lg-8">
-                                                    <button class="btn btn-success" type="submit">
+                                                <div class="col-lg-12">
+                                                    <button class="btn btn-success" type="submit" id="btn_branch_create">
                                                         Save
                                                     </button>
                                                 </div>
+                                                {{-- <div class="col-lg-3">
+                                                    <button class="btn btn-secondary" type="button"
+                                                        id="btn_branch_update_clear">
+                                                        Clear
+                                                    </button>
+                                                </div> --}}
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <form action="" method="post" id="branch_edit_form" data-url="">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="mt-3">
+                                            <label for="edit-master_branch_name">Designation Name</label>
+                                            <input type="text" class="form-control" id="edit-master_branch_name"
+                                                placeholder="Enter Branch name" name="master_branch_name">
+                                            <input type="hidden" name="" id="edit-branch_id">
+                                        </div>
+
+                                        <div class="mt-3">
+                                            <div class="row">
+                                                <div class="col-lg-9">
+                                                    <button class="btn btn-success" type="submit" id="btn_branch_update">
+                                                        Update
+                                                    </button>
+                                                </div>
                                                 <div class="col-lg-3">
-                                                    <button class="btn btn-secondary">
+                                                    <button class="btn btn-secondary" type="button"
+                                                        id="btn_branch_update_clear">
                                                         Clear
                                                     </button>
                                                 </div>
@@ -78,11 +107,107 @@
 @endpush
 @section('scripts')
     <script>
-        // ADD CATEGORY VALIDATION
         const validator = new window.JustValidate("#branch_add_form");
 
         validator
             .addField("#input-master_branch_name", [{
+                    rule: "required",
+                    errorMessage: "Branch name is required",
+                },
+                {
+                    rule: "minLength",
+                    value: 3,
+                    errorMessage: "Branch name must be at least 3 characters",
+                },
+                {
+                    rule: "maxLength",
+                    value: 20,
+                    errorMessage: "Branch name must be less than 20 characters",
+                },
+            ])
+            .onSuccess((event) => {
+                event.preventDefault();
+                const branchName = $("#input-master_branch_name").val();
+
+                $.ajaxSetup({
+                    headers: {
+                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+                    },
+                });
+
+                // AJAX Submission
+                $.ajax({
+                    type: "POST",
+                    url: "/branch_store",
+                    data: {
+                        branchName: branchName,
+                    },
+                    beforeSend: function() {
+                        $(".preloader").fadeIn();
+                    },
+                    success: function(response) {
+                        $(".preloader").fadeOut();
+
+                        if (response.status === 201) {
+                            Swal.fire({
+                                title: "Success",
+                                text: response
+                                    .message,
+                                icon: "success",
+                                customClass: {
+                                    popup: "swal-custom-popup",
+                                },
+                            });
+
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: "top-end",
+                                showConfirmButton: false,
+                                timer: 1500,
+                                timerProgressBar: true,
+                                customClass: {
+                                    popup: "swal-custom-popup",
+                                },
+                                didOpen: (toast) => {
+                                    toast.onmouseenter = Swal.stopTimer;
+                                    toast.onmouseleave = Swal.resumeTimer;
+                                },
+                            });
+
+                            Toast.fire({
+                                icon: "success",
+                                title: response
+                                    .message,
+                            });
+                        } else {
+                            Swal.fire({
+                                title: "Error",
+                                text: response.message || "An unexpected error occurred.",
+                                icon: "error",
+                            });
+                        }
+
+                        setTimeout(function() {
+                            window.location.reload();
+                        }, 1500);
+                    },
+                    error: function(xhr) {
+                        $(".preloader").fadeOut();
+
+                        Swal.fire({
+                            title: "Error",
+                            text: xhr.responseJSON?.message || "An error occurred.",
+                            icon: "error",
+                        });
+                    },
+                });
+            });
+
+
+        const editvalidator = new window.JustValidate("#branch_edit_form");
+
+        editvalidator
+            .addField("#edit-master_branch_name", [{
                     rule: "required",
                 },
                 {
@@ -98,8 +223,8 @@
                 // event.currentTarget.submit();
                 event.preventDefault();
 
-                var branchName = $("#input-master_branch_name").val();
-                var branchID = $("#input-branch_id").val();
+                var branchName = $("#edit-master_branch_name").val();
+                var branchID = $("#edit-branch_id").val();
 
                 var formData = {
                     branchName: branchName,
@@ -114,7 +239,7 @@
 
                 $.ajax({
                     type: "POST",
-                    url: "/branch_store",
+                    url: "/branch_update",
                     data: formData,
                     beforeSend: function() {
                         $(".preloader").fadeIn();
@@ -123,13 +248,14 @@
                         console.log(response);
                         $(".preloader").fadeOut();
 
-                        if (response.status === 201) {
+                        if (response.status === 200) {
                             Swal.fire({
                                 title: "Success",
-                                text: response.message, // Use the message from the server
+                                text: response
+                                    .message,
                                 icon: "success",
                                 customClass: {
-                                    popup: "swal-custom-popup", // Add a custom class
+                                    popup: "swal-custom-popup",
                                 },
                             });
 
@@ -140,7 +266,7 @@
                                 timer: 1500,
                                 timerProgressBar: true,
                                 customClass: {
-                                    popup: "swal-custom-popup", // Apply the custom class for the toast
+                                    popup: "swal-custom-popup",
                                 },
                                 didOpen: (toast) => {
                                     toast.onmouseenter = Swal.stopTimer;
@@ -150,36 +276,8 @@
 
                             Toast.fire({
                                 icon: "success",
-                                title: response.message, // Use the message from the server
-                            });
-                        } else if (response.status === 200) {
-                            Swal.fire({
-                                title: "Success",
-                                text: response.message, // Use the message from the server
-                                icon: "success",
-                                customClass: {
-                                    popup: "swal-custom-popup", // Add a custom class
-                                },
-                            });
-
-                            const Toast = Swal.mixin({
-                                toast: true,
-                                position: "top-end",
-                                showConfirmButton: false,
-                                timer: 1500,
-                                timerProgressBar: true,
-                                customClass: {
-                                    popup: "swal-custom-popup", // Apply the custom class for the toast
-                                },
-                                didOpen: (toast) => {
-                                    toast.onmouseenter = Swal.stopTimer;
-                                    toast.onmouseleave = Swal.resumeTimer;
-                                },
-                            });
-
-                            Toast.fire({
-                                icon: "success",
-                                title: response.message, // Use the message from the server
+                                title: response
+                                    .message,
                             });
                         } else {
                             Swal.fire({
@@ -199,9 +297,15 @@
                     error: function(xhr, status, error) {
                         $(".preloader").fadeOut();
                         console.error(xhr.responseText);
-                        // Optionally display error notification
                     },
                 });
             });
+
+
+        $(document).on('click', '#btn_branch_update_clear', function() {
+            $('#branch_edit_form').hide();
+            $('#branch_add_form').show();
+            $('#edit-branch_id').val('');
+        })
     </script>
 @endsection

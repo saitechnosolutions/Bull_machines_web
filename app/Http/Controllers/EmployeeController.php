@@ -111,6 +111,28 @@ class EmployeeController extends Controller {
         }
     }
 
+    public function branchupdate( Request $request ) {
+        try {
+            $branchName = $request->branchName;
+            $branchID = $request->branchID;
+
+            $branch = Branch::find( $branchID );
+
+            $branch->update( [
+                'branch_name'=>$branchName,
+            ] );
+
+            return response()->json( [
+                'status' => 200,
+                'message' => 'Branch Updated successfully'
+            ], 200 );
+
+        } catch ( \Throwable $th ) {
+            return response()->json( [ 'error', 'error creating Branch', 400 ] );
+            Log::error( $th );
+        }
+    }
+
     /**
     * Show the form for creating a new resource.
     */

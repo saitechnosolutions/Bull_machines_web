@@ -61,6 +61,8 @@ function handleCountryClick(countryId, countryName) {
 }
 
 $(document).ready(function () {
+    $("#branch_edit_form").hide();
+    // $("#btn_branch_update").hide();
     // APPEND VALUES ON INPUT FIELDS ON STATE MASTER
 
     window.handleStateClick = function (stateId, stateName, countryId) {
@@ -99,7 +101,25 @@ $(document).ready(function () {
     // APPEND VALUES ON INPUT FIELDS ON BRANCH MASTER
 
     window.handleBranchClick = function (branchId, branchName) {
-        $("#input-branch_id").val(branchId);
-        $("#input-master_branch_name").val(branchName);
+        $("#edit-branch_id").val(branchId);
+        $("#edit-master_branch_name").val(branchName);
+        $("#branch_add_form").hide();
+        $("#branch_edit_form").show();
     };
+
+    // Reset branch_id when branch_name is cleared
+    document
+        .getElementById("input-master_branch_name")
+        .addEventListener("input", function () {
+            if (this.value === "") {
+                $("#input-branch_id").val(""); // Clear the branch ID
+            }
+        });
+});
+
+$(document).ready(function () {
+    var branchname = $("#input-master_branch_name").val();
+    if (branchname == "") {
+        $("#input-branch_id").val("");
+    }
 });

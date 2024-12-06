@@ -20,7 +20,7 @@ Route::resource('auth',LoginController::class);
 Route::resource('dashboard',DashboardController::class);
 
 
-// ========= EMPLOYEE ========= //
+// ========= EMPLOYEE MASTER ========= //
 
 Route::resource('employe',EmployeeController::class);
 // DESIGNATION
@@ -29,8 +29,10 @@ Route::post('/designation_store',[EmployeeController::class,'designationstore'])
 // BRANCH
 Route::get('/employee/branch',[EmployeeController::class,'branchIndex']);
 Route::post('/branch_store',[EmployeeController::class,'branchstore']);
+Route::post('/branch_update',[EmployeeController::class,'branchupdate']);
+// EMPLO
 
-// ========= LOCATIONS ========= //
+// ========= LOCATIONS MASTER ========= //
 
 // COUNTRY
 Route::get('/locations/country',[LocationController::class,'countryindex']);
